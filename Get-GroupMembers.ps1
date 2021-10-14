@@ -1,3 +1,5 @@
+#Created by Juraj Benak juraj@jurajbenak.com
+
 #getting all the groups, filter by searchbase, name or both
 $groups = Get-ADGroup -LDAPFilter "(name=*)" -SearchBase "OU=Security Groups,DC=company,DC=local"
 
@@ -9,7 +11,6 @@ $file
 
 #creating new file to export the report to
 New-Item -Path c:\temp -Name $file -ItemType "file" -Value "" -Force
-
 
 $single_group_member_name = ""
 
@@ -34,8 +35,7 @@ foreach ($group in $groups) {
     foreach ($single_group_member in $group_member) {
           $myObject.Members += $single_group_member.name 
           $myObject.Members += ","
-          #$single_group_member_name += $single_group_member.name  
-          #$single_group_member_name += ","
+
     }
     $myObject.'ACL Group Name' = $group_name.Name
     $myObject.Description = $group_name.Description
@@ -43,6 +43,7 @@ foreach ($group in $groups) {
    
     #exporting to file
     Write-output $myObject | Export-Csv $file -Append
+    
     #resetting values for the next loop
     $single_group_member_name = ""
     $myObject.Members = ""
